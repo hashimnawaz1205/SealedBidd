@@ -46,7 +46,7 @@ class SignUp extends StatelessWidget {
                 return value.Profilepicture != null
                     ? SizedBox(
                         width: double.infinity,
-                        height: 160,
+                        height: 150,
                         child: CircleAvatar(
                           child: ClipOval(
                             child: Image.file(
