@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:sealed_bidd/Models/database.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
+import '../SearchPage.dart';
 import 'NetworkTypeAheadPage.dart';
 
 final List<String> images = [
@@ -29,6 +30,8 @@ class homeslider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var dbclass = context.read<Database>();
+
+    //context.read<Database>().getRecentCity();
     final Size size = MediaQuery.of(context).size;
     final double categoryHeight = size.height * 0.40;
     return SizedBox(
@@ -162,16 +165,41 @@ class homeslider extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Row(
-                    children: const [
+                    children: [
                       Icon(Icons.search),
-                      SizedBox(
-                        height: 50,
-                        width: 200,
-                        child:
-                            //CircularProgressIndicator(),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (BuildContext context) => SearchPage(),
+                            ),
+                          );
+                        },
+                        child: Consumer(
+                          builder: (context, value, child) {
+                            return const SizedBox(
+                                height: 50,
+                                width: 200,
+                                child: Padding(
+                                  padding:
+                                      EdgeInsets.only(left: 8.0, top: 15.0),
+                                  child: Text('Type Search Here'),
+                                )
 
-                            NetworkTypeAheadPage(),
+                                //NetworkTypeAheadPage(),
+                                );
+                          },
+                        ),
                       ),
+                      // SizedBox(
+                      //   height: 50,
+                      //   width: 200,
+                      //   child:
+
+                      //       //CircularProgressIndicator(),
+
+                      //      //NetworkTypeAheadPage(),
+                      // ),
                     ],
                   ),
                   Row(
@@ -182,93 +210,101 @@ class homeslider extends StatelessWidget {
                         color: Theme.of(context).primaryColor,
                       ),
                       InkWell(
-                        onTap: () {
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                    title: const Text('Select City'),
-                                    content: SingleChildScrollView(
-                                      child: ListBody(
-                                        children: [
-                                          ListTile(
-                                            title: const Text('Get From Gps'),
-                                            trailing:
-                                                const Icon(Icons.gps_fixed),
-                                            onTap: () {
-                                              // dbclass.getPermission();
-                                              // dbclass.getCityLocation();
-                                              // dbclass.SetCityForSearchbar(
-                                              //     dbclass.Cityname.toString());
+                        onTap: () async {
+                          print('your inkwell has been hit !');
+                          await dbclass.getPermission();
+                          dbclass.getCurrentlocation();
 
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
-                                          ListTile(
-                                            title: const Text('Islamabad'),
-                                            onTap: () {
-                                              // dbclass.SetCityForSearchbar('Islamabad');
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
-                                          ListTile(
-                                            title: const Text('Lahore'),
-                                            onTap: () {
-                                              //dbclass.SetCityForSearchbar('Lahore');
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
-                                          ListTile(
-                                            title: const Text('Peshawar'),
-                                            onTap: () {
-                                              // dbclass.SetCityForSearchbar('Peshawar');
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
-                                          ListTile(
-                                            title: const Text('karachi'),
-                                            onTap: () {
-                                              // dbclass.SetCityForSearchbar('karachi');
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
-                                          ListTile(
-                                            title: const Text('Quetta'),
-                                            onTap: () {
-                                              //dbclass.SetCityForSearchbar('Quetta');
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
-                                          ListTile(
-                                            title: const Text('Azad Kashmir'),
-                                            onTap: () {
-                                              //dbclass.SetCityForSearchbar(                                          'Azad kashmir');
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
-                                          ListTile(
-                                            title: const Text('rawalpindi'),
-                                            onTap: () {
-                                              // dbclass.SetCityForSearchbar('Rawalpindi');
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
-                                          ListTile(
-                                            title: const Text('Abbotabad'),
-                                            onTap: () {
-                                              //dbclass.SetCityForSearchbar('Abbotabad');
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
-                                        ],
-                                      ),
-                                    ));
-                              });
+                          // Navigator.of(context).pop();
+
+//
+                          // dbclass.getLocation();
+                          // showDialog(
+                          //     context: context,
+                          //     builder: (BuildContext context) {
+                          //       return AlertDialog(
+                          //           title: const Text('Select City'),
+                          //           content: SingleChildScrollView(
+                          //             child: ListBody(
+                          //               children: [
+                          //                 ListTile(
+                          //                   title: const Text('Get From Gps'),
+                          //                   trailing:
+                          //                       const Icon(Icons.gps_fixed),
+                          //                   onTap: () {
+                          //                     // dbclass.getPermission();
+                          //                     // dbclass.getCityLocation();
+                          //                     // dbclass.SetCityForSearchbar(
+                          //                     //     dbclass.Cityname.toString());
+
+                          //                     Navigator.of(context).pop();
+                          //                   },
+                          //                 ),
+                          //                 ListTile(
+                          //                   title: const Text('Islamabad'),
+                          //                   onTap: () {
+                          //                     // dbclass.SetCityForSearchbar('Islamabad');
+                          //                     Navigator.of(context).pop();
+                          //                   },
+                          //                 ),
+                          //                 ListTile(
+                          //                   title: const Text('Lahore'),
+                          //                   onTap: () {
+                          //                     //dbclass.SetCityForSearchbar('Lahore');
+                          //                     Navigator.of(context).pop();
+                          //                   },
+                          //                 ),
+                          //                 ListTile(
+                          //                   title: const Text('Peshawar'),
+                          //                   onTap: () {
+                          //                     // dbclass.SetCityForSearchbar('Peshawar');
+                          //                     Navigator.of(context).pop();
+                          //                   },
+                          //                 ),
+                          //                 ListTile(
+                          //                   title: const Text('karachi'),
+                          //                   onTap: () {
+                          //                     // dbclass.SetCityForSearchbar('karachi');
+                          //                     Navigator.of(context).pop();
+                          //                   },
+                          //                 ),
+                          //                 ListTile(
+                          //                   title: const Text('Quetta'),
+                          //                   onTap: () {
+                          //                     //dbclass.SetCityForSearchbar('Quetta');
+                          //                     Navigator.of(context).pop();
+                          //                   },
+                          //                 ),
+                          //                 ListTile(
+                          //                   title: const Text('Azad Kashmir'),
+                          //                   onTap: () {
+                          //                     //dbclass.SetCityForSearchbar(                                          'Azad kashmir');
+                          //                     Navigator.of(context).pop();
+                          //                   },
+                          //                 ),
+                          //                 ListTile(
+                          //                   title: const Text('rawalpindi'),
+                          //                   onTap: () {
+                          //                     // dbclass.SetCityForSearchbar('Rawalpindi');
+                          //                     Navigator.of(context).pop();
+                          //                   },
+                          //                 ),
+                          //                 ListTile(
+                          //                   title: const Text('Abbotabad'),
+                          //                   onTap: () {
+                          //                     //dbclass.SetCityForSearchbar('Abbotabad');
+                          //                     Navigator.of(context).pop();
+                          //                   },
+                          //                 ),
+                          //               ],
+                          //             ),
+                          //           ));
+                          //     });
                         },
                         child: Consumer<Database>(
                           builder: (context, value, child) {
                             return Text(
-                              'G12',
+                              value.cityName ?? 'Select City',
                               //dbclass.initial_city.toString(),
                               style: GoogleFonts.workSans(
                                   fontWeight: FontWeight.bold,

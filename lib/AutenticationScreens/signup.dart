@@ -60,12 +60,13 @@ class SignUp extends StatelessWidget {
                     : Stack(
                         alignment: Alignment.center,
                         children: [
-                          SizedBox(
+                          Container(
                             width: MediaQuery.of(context).size.width * 0.5,
                             height: MediaQuery.of(context).size.height * 0.2,
                             child: const CircleAvatar(
                               backgroundImage: NetworkImage(
-                                  "https://cdn2.vectorstock.com/i/1000x1000/17/61/male-avatar-profile-picture-vector-10211761.jpg"),
+                                "https://cdn2.vectorstock.com/i/1000x1000/17/61/male-avatar-profile-picture-vector-10211761.jpg",
+                              ),
                             ),
                           ),
                           Container(

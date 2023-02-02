@@ -131,7 +131,7 @@ class SearchCityBar extends StatelessWidget {
                 child: Consumer<Database>(
                   builder: (context, value, child) {
                     return Text(
-                      'G12',
+                      'Islamabad',
                       // dbclass.initial_city.toString(),
                       style: GoogleFonts.montserrat(
                           fontWeight: FontWeight.bold,

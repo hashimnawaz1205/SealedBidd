@@ -6,6 +6,8 @@ import 'package:provider/provider.dart';
 import 'package:sealed_bidd/AutenticationScreens/sign.dart';
 import 'package:sealed_bidd/AutenticationScreens/signup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:sealed_bidd/phonelogin/phonelogin.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Homepage/bottomnavigationbar.dart';
 import '../Models/database.dart';
@@ -23,6 +25,7 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var dbclass = context.read<Database>();
+    var isLoggedIn = context.read<Database>().isLoggedIn();
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -193,17 +196,33 @@ class Login extends StatelessWidget {
                           label: 'OK', onPressed: scaffold.hideCurrentSnackBar),
                     ),
                   );
+                } else if (dbclass.val == false) {
+                  final scaffold = ScaffoldMessenger.of(context);
+                  scaffold.showSnackBar(
+                    SnackBar(
+                      content: const Text('Remember Me'),
+                      action: SnackBarAction(
+                          label: 'OK', onPressed: scaffold.hideCurrentSnackBar),
+                    ),
+                  );
                 } else {
                   try {
                     UserCredential userCredential = await FirebaseAuth.instance
                         .signInWithEmailAndPassword(
                             email: emailcontroller.text,
                             password: passwordcontroller.text);
+
+                    FirebaseAuth _auth = FirebaseAuth.instance;
+                    String user = _auth.currentUser.toString();
+                    print('Current user......:' + user.toString());
                     Navigator.pushReplacement(
                       context,
                       new MaterialPageRoute(
                           builder: (context) => const bottomnavigationbar()),
                     );
+
+                    //shared preferences
+                    await dbclass.setKey(emailcontroller.text);
                   } on FirebaseAuthException catch (e) {
                     if (e.code == 'user-not-found') {
                       final scaffold = ScaffoldMessenger.of(context);
@@ -295,7 +314,9 @@ class Login extends StatelessWidget {
                 height: MediaQuery.of(context).size.height * 0.05,
                 width: MediaQuery.of(context).size.width * 0.1,
                 child: GestureDetector(
-                    onTap: () {},
+                    onTap: () async {
+                      await dbclass.googleSignIn(context);
+                    },
                     child: Image.asset('assets/images/google.png')),
               ),
               SizedBox(
@@ -305,7 +326,13 @@ class Login extends StatelessWidget {
                 height: MediaQuery.of(context).size.height * 0.05,
                 width: MediaQuery.of(context).size.width * 0.1,
                 child: GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        new MaterialPageRoute(
+                            builder: (context) => new LoginScreen()),
+                      );
+                    },
                     child: Image.asset('assets/images/phone.png')),
               ),
             ],

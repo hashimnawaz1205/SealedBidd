@@ -2,12 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:sealed_bidd/profile/changepassword.dart';
+import 'package:sealed_bidd/profile/favouriteservices.dart';
+import 'package:sealed_bidd/profile/termandcondition.dart';
+
+import '../IntroScreens/boardingscreen.dart';
+import '../Models/database.dart';
 
 class Profile extends StatelessWidget {
   const Profile({super.key});
 
   @override
   Widget build(BuildContext context) {
+    var dbclass = context.read<Database>();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFF02C908),
@@ -110,21 +118,30 @@ class Profile extends StatelessWidget {
                 ),
               ),
             ),
-            ListTile(
-              leading: Icon(
-                Icons.lock,
-                color: Color(0XFF6C757D),
-              ),
-              title: Text(
-                'Change Password',
-                style: GoogleFonts.workSans(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  fontStyle: FontStyle.normal,
-                  color: Color(0xFF266325),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  new MaterialPageRoute(
+                      builder: (context) => new ChangePassword()),
+                );
+              },
+              child: ListTile(
+                leading: Icon(
+                  Icons.lock,
+                  color: Color(0XFF6C757D),
                 ),
+                title: Text(
+                  'Change Password',
+                  style: GoogleFonts.workSans(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    fontStyle: FontStyle.normal,
+                    color: Color(0xFF266325),
+                  ),
+                ),
+                trailing: Icon(Icons.chevron_right),
               ),
-              trailing: Icon(Icons.chevron_right),
             ),
             ListTile(
               leading: Icon(
@@ -142,21 +159,30 @@ class Profile extends StatelessWidget {
               ),
               trailing: Icon(Icons.chevron_right),
             ),
-            ListTile(
-              leading: Icon(
-                Icons.favorite_outline,
-                color: Color(0XFF6C757D),
-              ),
-              title: Text(
-                'Favourite Services',
-                style: GoogleFonts.workSans(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  fontStyle: FontStyle.normal,
-                  color: Color(0xFF266325),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  new MaterialPageRoute(
+                      builder: (context) => new FavouriteServices()),
+                );
+              },
+              child: ListTile(
+                leading: Icon(
+                  Icons.favorite_outline,
+                  color: Color(0XFF6C757D),
                 ),
+                title: Text(
+                  'Favourite Services',
+                  style: GoogleFonts.workSans(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    fontStyle: FontStyle.normal,
+                    color: Color(0xFF266325),
+                  ),
+                ),
+                trailing: Icon(Icons.chevron_right),
               ),
-              trailing: Icon(Icons.chevron_right),
             ),
             ListTile(
               leading: Icon(
@@ -213,21 +239,30 @@ class Profile extends StatelessWidget {
               ),
               //trailing: Icon(Icons.chevron_right),
             ),
-            ListTile(
-              leading: Icon(
-                Icons.message_outlined,
-                color: Color(0XFF6C757D),
-              ),
-              title: Text(
-                'Terms And Conditions',
-                style: GoogleFonts.workSans(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  fontStyle: FontStyle.normal,
-                  color: Color(0xFF266325),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  new MaterialPageRoute(
+                      builder: (context) => new TermAndCondition()),
+                );
+              },
+              child: ListTile(
+                leading: Icon(
+                  Icons.message_outlined,
+                  color: Color(0XFF6C757D),
                 ),
+                title: Text(
+                  'Terms And Conditions',
+                  style: GoogleFonts.workSans(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    fontStyle: FontStyle.normal,
+                    color: Color(0xFF266325),
+                  ),
+                ),
+                //trailing: Icon(Icons.chevron_right),
               ),
-              //trailing: Icon(Icons.chevron_right),
             ),
             ListTile(
               leading: Icon(
@@ -246,7 +281,16 @@ class Profile extends StatelessWidget {
               //trailing: Icon(Icons.chevron_right),
             ),
             GestureDetector(
-              onTap: () {},
+              onTap: () async {
+                await dbclass.logout();
+                await dbclass.removeRecentCity();
+                dbclass.removeRecentSearch();
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => const BoardingScreen(),
+                  ),
+                );
+              },
               child: Container(
                 width: MediaQuery.of(context).size.width * 0.9,
                 height: MediaQuery.of(context).size.height * 0.07,
