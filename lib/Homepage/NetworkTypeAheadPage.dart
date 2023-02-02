@@ -75,27 +75,9 @@ class NetworkTypeAheadPage extends StatelessWidget {
 
           //Shared Preference for recent search
           dbclass.setrecentSearch(categories.name);
-          //check search category
-          dbclass.getSpecificCategory(context, categories.name);
-          // curl = user.name.toString();
 
-          // if (curl.isEmpty) {
-          //   // curl = "?city=" + getCity().toString();
-          //   print(curl);
-          //   Navigator.of(context).push(
-          //     MaterialPageRoute(
-          //       builder: (BuildContext context) => detailpage(curl: curl),
-          //     ),
-          //   );
-          // }
-          // if (curl.isNotEmpty) {
-          //   print(curl);
-          //   Navigator.of(context).push(
-          //     MaterialPageRoute(
-          //       builder: (BuildContext context) => detailpage(curl: curl),
-          //     ),
-          //   );
-          // }
+          dbclass.SearchSpecificCategory(
+              context, categories.name, dbclass.cityName);
 
           ScaffoldMessenger.of(context)
             ..removeCurrentSnackBar()

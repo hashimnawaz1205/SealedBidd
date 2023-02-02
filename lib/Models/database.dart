@@ -318,6 +318,41 @@ class Database extends ChangeNotifier {
             });
   }
 
+  // for searching order by city and category
+
+  Future<void> SearchSpecificCategory(
+      BuildContext context, String name, String city) async {
+    final firestoreInstace = FirebaseFirestore.instance;
+    firestoreInstace
+        .collection("User")
+        .where(
+          "Category",
+          isEqualTo: name,
+        )
+        .where(
+          "City",
+          isEqualTo: city,
+        )
+        .get()
+        .then((value) => {
+              user.clear(),
+              value.docs.forEach((element) {
+                user.add(element.data());
+                if (user.isNotEmpty) {
+                  print('List of user :' + user.toString());
+                  notifyListeners();
+                } else {
+                  print('No user Find :');
+                  notifyListeners();
+                }
+              }),
+              Navigator.push(
+                context,
+                new MaterialPageRoute(builder: (context) => new Plumber()),
+              ),
+            });
+  }
+
   //change password
   String pwdLength = '';
   void checkPassword(String password) {
@@ -479,44 +514,6 @@ class Database extends ChangeNotifier {
     //notifyListeners();
   }
 
-  //for searching
-  // List UserData = [];
-  // Future<void> getUser() async {
-  //   //for category
-  //   CollectionReference _collectionRefCat =
-  //       FirebaseFirestore.instance.collection('User');
-  //   // Get docs from collection reference
-  //   QuerySnapshot querySnapshot = await _collectionRefCat.get();
-
-  //   // Get data from docs and convert map to List
-  //   UserData = querySnapshot.docs.map((doc) => doc.data()).toList();
-  //   notifyListeners();
-  //   print('Length of Category' + UserData.length.toString());
-  // }
-
-  // bool isTyping = false;
-
-  // List UserData1 = [];
-
-  // void searchData(String text) {
-  //   var smallText = text.toLowerCase();
-
-  //   UserData1.clear();
-  //   UserData.forEach((element) {
-  //     var letters = element.Name.split("");
-  //     print('First Letter: ' + letters.first);
-
-  //     var smallLetter = letters.first.toLowerCase();
-  //     if (smallLetter.contains(smallText)) {
-  //       UserData1.add(element);
-  //       notifyListeners();
-  //     }
-  //   });
-
-  //   isTyping = true;
-  //   notifyListeners();
-  // }
-
   //for recent search
   List<String> recent = [];
   Future<void> setrecentSearch(name) async {
@@ -635,9 +632,10 @@ class Database extends ChangeNotifier {
   var cityName = null ?? 'Select City';
 
   Future<void> getCityLocation() async {
-    var gotten_city = await _mapLocation['results'][0]['address_components'][5]
+    var gotten_city = await _mapLocation['results'][0]['address_components'][2]
             ['long_name']
         .toString();
+
     cityName = gotten_city;
 
     setrecentCity(cityName);
@@ -662,7 +660,7 @@ class Database extends ChangeNotifier {
 
   void getRecentCity() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String recentsCity = prefs.getString('RecentCity') ?? '';
+    String recentsCity = prefs.getString('RecentCity') ?? 'Selecy City';
     if (recentsCity != cityName) cityName = recentsCity;
 
     notifyListeners();
